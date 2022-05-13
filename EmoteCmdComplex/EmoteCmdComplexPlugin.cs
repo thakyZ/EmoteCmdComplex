@@ -211,7 +211,6 @@ namespace EmoteCmdComplex {
       return false;
     }
 
-
     // Logging functions
     // Borrowed from https://github.com/Bluefissure/MapLinker/blob/master/MapLinker/MapLinker.cs:147
     /// <summary>

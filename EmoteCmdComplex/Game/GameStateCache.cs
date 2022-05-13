@@ -15,7 +15,6 @@ namespace EmoteCmdComplex.Game {
   /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/GameStateCache.cs
   /// </summary>
   public unsafe class GameStateCache {
-
     private static class Signatures {
       internal const string IsEmoteUnlocked = "E8 ?? ?? ?? ?? 84 C0 74 A4";
     }

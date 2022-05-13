@@ -1,9 +1,4 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="Configuration.cs" company="Neko Boi Nick">
-// Copyright (c) Neko Boi Nick. All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
-using System;
+﻿using System;
 
 using Dalamud.Configuration;
 using Dalamud.Plugin;
@@ -11,7 +6,7 @@ using Dalamud.Plugin;
 /// <summary>
 /// Main plugin configuration implementation.
 /// </summary>
-namespace EmoteCmdComplex {
+namespace EmoteCmdComplex.Base {
   /// <summary>
   /// Main plugin configuration class.
   /// </summary>
@@ -20,14 +15,14 @@ namespace EmoteCmdComplex {
     /// <summary>
     /// Gets or sets the version of the configuration file.
     /// </summary>
-    public int Version { get; set; } = 0;
+    public int Version { get; set; } = 1;
 
     /// <summary>
     /// Gets or sets a value indicating whether the debug logging system is enabled.
     /// </summary>
     public bool Debug { get; set; } = false;
 
-    // the below exist just to make saving less cumbersome
+    // The below exist just to make saving less cumbersome
 
     /// <summary>
     /// The plugin interface.

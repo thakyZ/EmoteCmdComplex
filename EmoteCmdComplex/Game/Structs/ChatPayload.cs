@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace EmoteCmdComplex {
+namespace EmoteCmdComplex.Game.Structs {
+  /// <summary>
+  /// The payload for what to send to chat.
+  /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/Structs/ChatPayload.cs
+  /// </summary>
   [StructLayout(LayoutKind.Explicit)]
   internal readonly struct ChatPayload : IDisposable {
     [FieldOffset(0)] private readonly IntPtr _stringPtr;

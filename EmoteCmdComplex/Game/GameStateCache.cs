@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using Dalamud.Memory;
 using Dalamud.Utility.Signatures;
 
+using EmoteCmdComplex.Base;
+
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
 using Lumina.Excel.GeneratedSheets;
 
-namespace EmoteCmdComplex {
+namespace EmoteCmdComplex.Game {
+  /// <summary>
+  /// The game state data. Loaded from binary signatures.
+  /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/GameStateCache.cs
+  /// </summary>
   public unsafe class GameStateCache {
 
     private static class Signatures {

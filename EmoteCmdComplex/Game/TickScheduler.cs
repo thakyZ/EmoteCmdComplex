@@ -1,15 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Text;
 
 using Dalamud.Game;
 using Dalamud.Logging;
 
+using EmoteCmdComplex.Base;
+
 // borrowed from https://github.com/Eternita-S/NotificationMaster/blob/master/NotificationMaster/TickScheduler.cs
 // ToDo: Deprecate when https://github.com/goatcorp/Dalamud/pull/832 is merged
-namespace EmoteCmdComplex {
+namespace EmoteCmdComplex.Game {
+  /// <summary>
+  /// The tick scheduler, we don't wanna send too many packets to FFXIV...
+  /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/TickScheduler.cs
+  /// </summary>
   internal class TickScheduler : IDisposable {
     internal static TickScheduler Schedule(Action function, Framework? framework = null, long delay = 0) {
       framework ??= Injections.Framework;

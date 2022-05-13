@@ -1,18 +1,14 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="PluginUI.cs" company="Neko Boi Nick">
-// Copyright (c) Neko Boi Nick. All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
-using System;
+﻿using System;
 using System.Numerics;
+
+using EmoteCmdComplex.Base;
 
 using ImGuiNET;
 
-namespace EmoteCmdComplex
-{
-    // It is good to have this be disposable in general, in case you ever need it
-    // to do any cleanup
-    class PluginUI : IDisposable
+namespace EmoteCmdComplex.UI {
+  // It is good to have this be disposable in general, in case you ever need it
+  // to do any cleanup
+  class PluginUI : IDisposable
     {
         private Configuration configuration;
 

@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
-using Dalamud.Hooking;
-using Dalamud.Logging;
 using Dalamud.Utility.Signatures;
+
+using EmoteCmdComplex.Game.Structs;
 
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
-using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
-namespace EmoteCmdComplex {
+namespace EmoteCmdComplex.Game {
+  /// <summary>
+  /// Signature helper for chat, mainly. Used for sending chat messages.
+  /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/SigHelper.cs
+  /// </summary>
   public unsafe class SigHelper : IDisposable {
     private static class Signatures {
       internal const string SendChatMessage = "48 89 5C 24 ?? 57 48 83 EC 20 48 8B FA 48 8B D9 45 84 C9";

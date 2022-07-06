@@ -3,6 +3,7 @@
 using EmoteCmdComplex.Base;
 
 using Lumina.Excel.GeneratedSheets;
+using EmoteCmdComplex.Game;
 
 namespace EmoteCmdComplex.ActionExecutor.Strategies {
   /// <summary>

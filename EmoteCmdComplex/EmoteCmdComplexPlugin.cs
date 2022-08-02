@@ -192,10 +192,6 @@ namespace EmoteCmdComplex {
       else if (resultArgs.Count == 2) {
         RunCustomEmote(resultArgs[0], resultArgs[1]);
       }
-      // If all else return error.
-      else {
-        return;
-      }
     }
 
     /// <summary>

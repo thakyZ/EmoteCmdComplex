@@ -1,76 +1,85 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <Authors>Neko Boi Nick</Authors>
-    <Company></Company>
-    <Version>1.0.0.0</Version>
-    <Description>A command to input more complex custom emotes.</Description>
-    <Copyright>MIT</Copyright>
-    <PackageProjectUrl>https://github.com/thakyZ/EmoteCmdComplex-dalamud</PackageProjectUrl>
-  </PropertyGroup>
 
   <PropertyGroup>
+    <Version>1.0.1</Version>
     <TargetFramework>net5.0-windows</TargetFramework>
-    <Platforms>x64</Platforms>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>$(appdata)\XIVLauncher\devPlugins\EmoteCmdComplex\</OutputPath>
-    <BaseOutputPath>$(appdata)\XIVLauncher\devPlugins\EmoteCmdComplex\</BaseOutputPath>
+    <LangVersion>preview</LangVersion>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <OutputPath>$(AppData)\XIVLauncher\devPlugins\EmoteCmdComplex\</OutputPath>
+    <BaseOutputPath>$(AppData)\XIVLauncher\devPlugins\EmoteCmdComplex\</BaseOutputPath>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Include=".\EmoteCmdComplex.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\Data\EmoteCmdComplex.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <Visible>false</Visible>
-    </Content>
-  </ItemGroup>
 
   <PropertyGroup>
-    <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+    <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
+    <Dalamud>$(DALAMUD_HOME)</Dalamud>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsCI)' == 'true'">
+    <Dalamud>$(HOME)/dalamud</Dalamud>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.7" />
-    <PackageReference Include="ILRepack" Version="2.0.18" GeneratePathProperty="true" />
-    <PackageReference Include="Microsoft.VisualStudio.VsixColorCompiler" Version="17.0.31709.430" />
+    <Reference Include="Dalamud">
+      <HintPath>$(DalamudLibPath)\Dalamud.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
     <Reference Include="FFXIVClientStructs">
-      <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
+      <HintPath>$(DalamudLibPath)\FFXIVClientStructs.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ImGui.NET">
+      <HintPath>$(DalamudLibPath)\ImGui.NET.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="ImGuiScene">
+      <HintPath>$(DalamudLibPath)\ImGuiScene.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Lumina">
+      <HintPath>$(DalamudLibPath)\Lumina.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Lumina.Excel">
+      <HintPath>$(DalamudLibPath)\Lumina.Excel.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="Dalamud">
-      <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="ImGui.NET">
-      <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="ImGuiScene">
-      <HintPath>$(DalamudLibPath)ImGuiScene.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Lumina">
-      <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Lumina.Excel">
-      <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
+    <Reference Include="FFXIVClientStructs">
+      <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
 
   <ItemGroup>
-    <EditorConfigFiles Remove="..\.editorconfig" />
+    <PackageReference Include="DalamudPackager" Version="2.1.7"/>
+    <PackageReference Include="ILRepack" Version="2.0.18" GeneratePathProperty="true"/>
+    <PackageReference Include="Microsoft.VisualStudio.VsixColorCompiler" Version="17.0.31709.430"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".\EmoteCmdComplex.yaml" Link="EmoteCmdComplex.yaml" CopyToOutputDirectory="PreserveNewest" Visible="true" />
+    <Content Include="..\Data\EmoteCmdComplex.png" Link="images/EmoteCmdComplex.png" CopyToOutputDirectory="PreserveNewest" Visible="true" />
+    <Content Include="..\README.md" Link="README.md" CopyToOutputDirectory="PreserveNewest" Visible="true" />
+    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" Visible="true" />
+    <Content Include="..\.gitignore" Link=".gitignore" CopyToOutputDirectory="PreserveNewest" Visible="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="..\.editorconfig"/>
   </ItemGroup>
 
 </Project>

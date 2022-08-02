@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Data;
 
 using EmoteCmdComplex.ActionExecutor.Strategies;
+using EmoteCmdComplex.Base;
 using EmoteCmdComplex.Game;
 using EmoteCmdComplex.Utils;
 
@@ -19,23 +21,23 @@ namespace EmoteCmdComplex {
           throw new ArgumentNullException($"Emote not found... ID: [{emoteId}]");
         }
         if (isTargeting) {
-          _ = TickScheduler.Schedule(delegate {
+          _ = Injections.Framework.RunOnFrameworkThread(duler.Schedule(delegate {
             ChatUtils.SendSanitizedChatMessage($"/em {targetText} <t>");
             ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
           });
         } else {
-          _ = TickScheduler.Schedule(delegate {
+          _ = Injections.Framework.RunOnFrameworkThread(delegate {
             ChatUtils.SendSanitizedChatMessage($"/em {singleText}");
             ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
           });
         }
       } else {
         if (isTargeting) {
-          _ = TickScheduler.Schedule(delegate {
+          _ = Injections.Framework.RunOnFrameworkThread(delegate {
             ChatUtils.SendSanitizedChatMessage($"/em {targetText} <t>");
           });
         } else {
-          _ = TickScheduler.Schedule(delegate {
+          _ = Injections.Framework.RunOnFrameworkThread(delegate {
             ChatUtils.SendSanitizedChatMessage($"/em {singleText}");
           });
         }

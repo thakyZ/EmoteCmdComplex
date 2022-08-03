@@ -21,7 +21,7 @@ namespace EmoteCmdComplex {
           throw new ArgumentNullException($"Emote not found... ID: [{emoteId}]");
         }
         if (isTargeting) {
-          _ = Injections.Framework.RunOnFrameworkThread(duler.Schedule(delegate {
+          _ = Injections.Framework.RunOnFrameworkThread(delegate {
             ChatUtils.SendSanitizedChatMessage($"/em {targetText} <t>");
             ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
           });

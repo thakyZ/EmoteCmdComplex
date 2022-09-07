@@ -9,8 +9,8 @@ on:
     branches: [main]
 
 env:
-  PLUGIN_REPO: InitialDet/MyDalamudPlugins
-  PROJECT_NAME: AutoHook
+  PLUGIN_REPO: thakyZ/MyDalamudPlugins
+  PROJECT_NAME: EmoteCmdComplex
 
 jobs:
   build:

@@ -22,7 +22,7 @@ namespace EmoteCmdComplex {
     private readonly TargetSystem* _targetSystem;
     private static bool ContainsPlaceholder(string text) {
       var placeholders = new string[] {
-        "<t>", "<target>", "<tt>", "<t2t>", "<me>", "<0>", "<r>", "<reply>", "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<f>", "<focus>", "<lt>", "<lasttarget>", "<le>", "<lastenemy>", "<la>", "<lastattacker>", "<c>", "<comp>", "<b>", "<buddy>", "<pet>", "<attack1>", "<attack2>", "<attack3>", "<attack4>", "<attack5>", "<bind1>", "<bind2>", "<bind3>", "<ignore1>", "<ignore2>", "<square>", "<circle>", "<cross>", "<triange>", "<mo>", "<mouseover>", "<targethpp>", "<thpp>", "<focushpp>", "<fhpp>", "<targetclass>", "<tclass>", "<targetjob>", "<tjob>", "<focusclass>", "<fclass>", "<focusjob>", "<fjob>"
+        "<t>", "<target>"
       };
       foreach (var _ in from placeholder in placeholders where text.Contains(placeholder) select new { }) {
         return true;
@@ -45,7 +45,7 @@ namespace EmoteCmdComplex {
               ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
             });
           } else {
-            EmoteCmdComplexPlugin.LogError("Target placeholder not detected in the target text argument.");
+            LogError("Target placeholder not detected in the target text argument.");
           }
         } else {
           _ = Service.Framework.RunOnFrameworkThread(delegate {
@@ -60,7 +60,7 @@ namespace EmoteCmdComplex {
               ChatUtils.SendSanitizedChatMessage($"/em {targetText}");
             });
           } else {
-            EmoteCmdComplexPlugin.LogError("Target placeholder not detected in the target text argument.");
+            LogError("Target placeholder not detected in the target text argument.");
           }
         } else {
           _ = Service.Framework.RunOnFrameworkThread(delegate {

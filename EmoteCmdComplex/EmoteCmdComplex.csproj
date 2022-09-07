@@ -2,9 +2,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>1.0.1</Version>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <Version>1.0.2</Version>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>Any CPU</Platforms>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
@@ -65,17 +66,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.7"/>
+    <PackageReference Include="DalamudPackager" Version="2.1.8"/>
     <PackageReference Include="ILRepack" Version="2.0.18" GeneratePathProperty="true"/>
-    <PackageReference Include="Microsoft.VisualStudio.VsixColorCompiler" Version="17.0.31709.430"/>
+    <PackageReference Include="Microsoft.VisualStudio.VsixColorCompiler" Version="17.3.32803.156"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include=".\EmoteCmdComplex.yaml" Link="EmoteCmdComplex.yaml" CopyToOutputDirectory="PreserveNewest" Visible="true" />
-    <Content Include="..\Data\EmoteCmdComplex.png" Link="images/EmoteCmdComplex.png" CopyToOutputDirectory="PreserveNewest" Visible="true" />
-    <Content Include="..\README.md" Link="README.md" CopyToOutputDirectory="PreserveNewest" Visible="true" />
-    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" Visible="true" />
-    <Content Include="..\.gitignore" Link=".gitignore" CopyToOutputDirectory="PreserveNewest" Visible="true" />
+    <Content Include=".\EmoteCmdComplex.json" Link="EmoteCmdComplex.yaml" CopyToOutputDirectory="PreserveNewest" Visible="true"/>
+    <Content Include="..\Data\EmoteCmdComplex.png" Link="images/EmoteCmdComplex.png" CopyToOutputDirectory="PreserveNewest" Visible="true"/>
+    <Content Include="..\README.md" Link="README.md" CopyToOutputDirectory="PreserveNewest" Visible="true"/>
+    <Content Include="..\LICENSE" Link="LICENSE.txt" CopyToOutputDirectory="PreserveNewest" Visible="true"/>
+    <Content Include="..\.gitignore" Link=".gitignore" CopyToOutputDirectory="PreserveNewest" Visible="true"/>
   </ItemGroup>
 
   <ItemGroup>

@@ -1,8 +1,0 @@
-name: Emote Command Complex
-author: Neko Boi Nick
-punchline: Complex custom emotes now with targets!
-description: |-
-  This plugin adds a command so that you can have more complex custom emotes.
-  Such as if you want to have one macro do an emote on a targeting and non-targeting basis.
-repo_url: https://github.com/thakyZ/EmoteCmdComplex-dalamud
-icon_url: https://raw.githubusercontent.com/thakyZ/EmoteCmdComplex-dalamud/main/Data/EmoteCmdComplex.png

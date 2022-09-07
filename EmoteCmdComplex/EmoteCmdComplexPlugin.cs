@@ -112,7 +112,7 @@ namespace EmoteCmdComplex {
       // ---------------------------
       // You might normally want to embed resources and load them from the manifest stream
       // TODO: Heed this suggestion.
-      var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "EmoteCmdComplex.png");
+      var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "images", "EmoteCmdComplex.png");
       var pluginIcon = this.PluginInterface.UiBuilder.LoadImage(imagePath);
       this.PluginUi = new PluginUI(this.Configuration, pluginIcon);
 

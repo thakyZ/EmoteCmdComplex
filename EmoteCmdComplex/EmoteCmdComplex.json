@@ -1,6 +1,6 @@
 {
   "ApplicableVersion": "any",
-  "AssemblyVersion": "1.0.2.0",
+  "AssemblyVersion": "1.0.2.1",
   "Author": "Neko Boi Nick",
   "DalamudApiVersion": 7,
   "Description": "This plugin adds a command so that you can have more complex custom emotes.\nSuch as if you want to have one macro do an emote on a targeting and non-targeting basis.",

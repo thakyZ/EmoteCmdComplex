@@ -10,10 +10,8 @@ using FFXIVClientStructs.FFXIV.Client.Game.Control;
 
 namespace EmoteCmdComplex {
   public unsafe partial class EmoteCmdComplexPlugin {
-    private readonly TargetSystem* _targetSystem;
-
-    private void RunCustomEmote(string singleText, string targetText, uint emoteId = 0) {
-      var isTargeting = _targetSystem->GetCurrentTarget() is not null;
+    private static void RunCustomEmote(string singleText, string targetText, uint emoteId = 0) {
+      var isTargeting = Service.Targets.Target is not null;
 
       if (emoteId != 0) {
         var emote = EmoteStrategy.GetEmoteById(emoteId);

@@ -8,7 +8,6 @@ namespace EmoteCmdComplex.Utils {
   public static class ChatUtils {
     // Borrowed base logic from ChatTwo by ascclemens
     public static void SendSanitizedChatMessage(string text, bool commandOnly = true) {
-      var plugin = EmoteCmdComplexPlugin.Instance;
 
       if (commandOnly && !text.StartsWith("/")) {
         throw new ArgumentException($"The specified message {text} does not start with a slash while in command-only mode.");
@@ -16,9 +15,9 @@ namespace EmoteCmdComplex.Utils {
 
       // Sanitization rules
       text = text.Replace("\n", " ");
-      text = plugin.SigHelper.GetSanitizedString(text);
+      text = Service.SigHelper.GetSanitizedString(text);
 
-      plugin.SigHelper.SendChatMessage(text);
+      Service.SigHelper.SendChatMessage(text);
     }
   }
 }

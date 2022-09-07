@@ -22,27 +22,26 @@ namespace EmoteCmdComplex.Base {
     /// </summary>
     public bool Debug { get; set; } = false;
 
-    // The below exist just to make saving less cumbersome
-
-    /// <summary>
-    /// The plugin interface.
-    /// </summary>
-    [NonSerialized]
-    private DalamudPluginInterface? pluginInterface;
-
     /// <summary>
     /// Initializes the configuration.
     /// </summary>
     /// <param name="pluginInterface">The plugin interface from the main plugin implementation.</param>
-    public void Initialize(DalamudPluginInterface pluginInterface) {
-      this.pluginInterface = pluginInterface;
+    public static Configuration Load() {
+        if (Service.PluginInterface.GetPluginConfig() is Configuration config)
+        {
+            return config;
+        }
+
+        config = new Configuration();
+        config.Save();
+        return config;
     }
 
     /// <summary>
     /// Saves the plugin configuration to file.
     /// </summary>
     public void Save() {
-      this.pluginInterface!.SavePluginConfig(this);
+      Service.PluginInterface!.SavePluginConfig(this);
     }
   }
 }

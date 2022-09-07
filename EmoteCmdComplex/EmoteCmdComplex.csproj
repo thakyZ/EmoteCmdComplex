@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>Neko Boi Nick</Authors>
-    <Version>1.0.2.1</Version>
+    <Version>1.0.2.2</Version>
     <Description>This plugin adds a command so that you can have more complex custom emotes.\nSuch as if you want to have one macro do an emote on a targeting and non-targeting basis.</Description>
     <TargetFramework>net6.0-windows</TargetFramework>
     <Configurations>Release;Debug</Configurations>
@@ -85,8 +85,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="EmoteCmdComplex.json" CopyToOutputDirectory="Always"/>
-    <Folder Include="..\Data\" CopyToOutputDirectory="Never"/>
+		<Content Include="EmoteCmdComplex.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+    <Folder Include="images\" />
     <Content Include="..\README.md" CopyToOutputDirectory="Always"/>
     <Content Include="..\LICENSE" CopyToOutputDirectory="Always"/>
     <Content Include="..\.gitignore" CopyToOutputDirectory="Never"/>

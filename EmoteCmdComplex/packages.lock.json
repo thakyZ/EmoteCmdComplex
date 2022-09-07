@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net6.0-windows7.0": {
+      "DalamudPackager": {
+        "type": "Direct",
+        "requested": "[2.1.8, )",
+        "resolved": "2.1.8",
+        "contentHash": "YqagNXs9InxmqkXzq7kLveImxnodkBEicAhydMXVp7dFjC7xb76U6zGgAax4/BWIWfZeWzr5DJyQSev31kj81A=="
+      },
+      "ILRepack": {
+        "type": "Direct",
+        "requested": "[2.0.18, )",
+        "resolved": "2.0.18",
+        "contentHash": "sR5Aj3JLDbA8JwESfWYfigSz5k1oNSHPN434W1LX8sboWJYEOSQP/KkvZGmJKPgajzSUKkl2jDar3LPZiMFU4Q=="
+      },
+      "Microsoft.VisualStudio.VsixColorCompiler": {
+        "type": "Direct",
+        "requested": "[17.3.32803.156, )",
+        "resolved": "17.3.32803.156",
+        "contentHash": "+uFdki/2wX4BtDGFjAiBUFcDUtd8Ufb/rZni6TwArnoXHWzGn76f77dhLF7n0eHvOh/a4W53mqLrENzTIRjMzg=="
+      }
+    }
+  }
+}

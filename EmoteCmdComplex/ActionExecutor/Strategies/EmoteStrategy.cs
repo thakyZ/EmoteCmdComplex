@@ -12,11 +12,6 @@ namespace EmoteCmdComplex.ActionExecutor.Strategies {
   /// </summary>
   internal static class EmoteStrategy {
     /// <summary>
-    /// Gets GameStateCache from the plugin instance.
-    /// </summary>
-    private static readonly GameStateCache GameStateCache = EmoteCmdComplexPlugin.Instance.GameStateCache;
-
-    /// <summary>
     /// Gets the executable action from a <see cref="GameStateCache"/>.
     /// </summary>
     /// <param name="emote">The emote data.</param>
@@ -28,12 +23,12 @@ namespace EmoteCmdComplex.ActionExecutor.Strategies {
       };
     }
     internal static Emote? GetEmoteById(uint id) {
-      return Injections.DataManager.Excel.GetSheet<Emote>()!.GetRow(id);
+      return Service.DataManager.Excel.GetSheet<Emote>()!.GetRow(id);
     }
 
     internal static uint GetEmoteByName(string name) {
-      GameStateCache.Refresh();
-      var emotes = GameStateCache.UnlockedEmotes!.Select(GetExecutableAction).ToList();
+      Service.GameStateCache!.Refresh();
+      var emotes = Service.GameStateCache!.UnlockedEmotes!.Select(GetExecutableAction).ToList();
 
       if (emotes == null || emotes.Count == 0) {
         return 0;

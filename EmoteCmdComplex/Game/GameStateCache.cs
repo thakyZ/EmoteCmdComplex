@@ -27,7 +27,7 @@ namespace EmoteCmdComplex.Game {
     internal bool IsEmoteUnlocked(uint emoteId) {
       if (this._isEmoteUnlocked == null) return false;
 
-      var emote = Injections.DataManager.Excel.GetSheet<Emote>()!.GetRow(emoteId);
+      var emote = Service.DataManager.Excel.GetSheet<Emote>()!.GetRow(emoteId);
       if (emote == null || emote.Order == 0) return false;
 
       return emote.UnlockLink == 0 || (this._isEmoteUnlocked(UIState.Instance(), emote.UnlockLink, 1) > 0);
@@ -39,7 +39,7 @@ namespace EmoteCmdComplex.Game {
 
     public void Refresh() {
       if (this._isEmoteUnlocked != null) {
-        this.UnlockedEmotes = Injections.DataManager.GetExcelSheet<Emote>()!
+        this.UnlockedEmotes = Service.DataManager.GetExcelSheet<Emote>()!
             .Where(x => this.IsEmoteUnlocked(x.RowId)).ToList();
       }
     }

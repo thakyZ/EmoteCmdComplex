@@ -178,6 +178,9 @@ dotnet_diagnostic.S1144.severity = none
 # S2583: Conditionally executed code should be reachable
 dotnet_diagnostic.S2583.severity = none
 
+# S1751: Loops with at most one iteration should be refactored
+dotnet_diagnostic.S1751.severity = none
+
 [*.vb]
 # Modifier preferences
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion

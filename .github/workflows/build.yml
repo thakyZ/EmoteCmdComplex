@@ -27,7 +27,7 @@ jobs:
 
       - name: Download Dalamud
         run: |
-          Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/net5/latest.zip -OutFile latest.zip
+          Invoke-WebRequest -Uri https://goatcorp.github.io/dalamud-distrib/latest.zip -OutFile latest.zip
           Expand-Archive -Force latest.zip "$env:AppData\XIVLauncher\addon\Hooks\dev\"
       - name: Build
         run: |
@@ -35,7 +35,7 @@ jobs:
           dotnet build --configuration Release
         env:
           DOTNET_CLI_TELEMETRY_OUTPUT: true
-          
+
       - name: Upload artifact
         uses: actions/upload-artifact@v2.2.1
         with:
@@ -62,16 +62,16 @@ jobs:
       - name: Get version
         id: version
         uses: notiz-dev/github-action-json-property@release
-        with: 
+        with:
             path: '${{env.PROJECT_NAME}}.json'
-            prop_path: 'AssemblyVersion'   
-      - run: echo ${{steps.version.outputs.prop}} 
+            prop_path: 'AssemblyVersion'
+      - run: echo ${{steps.version.outputs.prop}}
 
       - name: Create release
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ env.PROJECT_NAME }} ${{steps.version.outputs.prop}}
-          tag_name: ${{steps.version.outputs.prop}} 
+          tag_name: ${{steps.version.outputs.prop}}
           body: ${{ github.events.commits[0].message }}
           files: ${{ steps.download.outputs.download-path }}\latest.zip
 
@@ -80,4 +80,4 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           repository: ${{env.PLUGIN_REPO}}
-          event-type: new-release    
+          event-type: new-release

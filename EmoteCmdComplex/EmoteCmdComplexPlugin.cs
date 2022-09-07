@@ -26,18 +26,6 @@ namespace EmoteCmdComplex {
   /// </summary>
   public partial class EmoteCmdComplexPlugin : IDalamudPlugin {
     /// <summary>
-    /// The instance of the plugin.
-    /// </summary>
-    internal static EmoteCmdComplexPlugin Instance = null!;
-    /// <summary>
-    /// The <see cref="GameStateCache"/> which stores the binary data in the game.
-    /// </summary>
-    internal GameStateCache GameStateCache { get; }
-    /// <summary>
-    /// The <see cref="SigHelper"/> which helps with writing/reading binary signatures.
-    /// </summary>
-    public SigHelper SigHelper { get; }
-    /// <summary>
     /// The name of the plugin.
     /// </summary>
     public string Name => "Emote Command Complex";
@@ -46,40 +34,9 @@ namespace EmoteCmdComplex {
     /// </summary>
     private const string CommandName = "/xlem";
     /// <summary>
-    /// The plugin interface to be set via the constructor.
+    /// Plugin UI Manager
     /// </summary>
-    private DalamudPluginInterface PluginInterface {
-      get; init;
-    }
-    /// <summary>
-    /// The command manager to make commands for the plugin onto Dalamud.
-    /// </summary>
-    private CommandManager CommandManager {
-      get; init;
-    }
-    /// <summary>
-    /// The instance for the configuration manager.
-    /// </summary>
-    private Configuration Configuration {
-      get; init;
-    }
-    /// <summary>
-    /// The instance for the chat gui.
-    /// </summary>
-    [PluginService]
-    internal ChatGui ChatGui {
-      get; private set;
-    }
-    /// <summary>
-    /// The instance of the plugin ui manager.
-    /// </summary>
-    private PluginUI PluginUi {
-      get; init;
-    }
-    /// <summary>
-    /// Target manager for checking if the player is targeting someone or not.
-    /// </summary>
-    private readonly TargetManager _targetManager;
+    private static PluginUI PluginUI = null!;
 
     /// <summary>
     /// The constructor for the plugin.
@@ -88,61 +45,23 @@ namespace EmoteCmdComplex {
     /// <param name="commandManager">Dalamud Command Manager.</param>
     /// <param name="chat">Dalamud Chat Manager.</param>
     /// <param name="targetManager">Dalamud Target Manager.</param>
-    public EmoteCmdComplexPlugin(
-        [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-        [RequiredVersion("1.0")] CommandManager commandManager,
-        TargetManager targetManager) {
-      // Initialize the Plugin and Command Interface/Manager.
-      this.PluginInterface = pluginInterface;
-      this.CommandManager = commandManager;
-      // Create the injection instances
-      // Borrowed from https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/XIVDeckPlugin.cs:37
-      pluginInterface.Create<Injections>();
-      Resolver.Initialize(Injections.SigScanner.SearchBase);
-
-      // Initialize the instance
-      // Ignore the warning.
-      Instance = this;
-
-      // Create the configuration instance.
-      this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
-      this.Configuration.Initialize(this.PluginInterface);
-
-      // Initialize the plugin icon.
-      // ---------------------------
-      // You might normally want to embed resources and load them from the manifest stream
-      // TODO: Heed this suggestion.
-      var imagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "images", "EmoteCmdComplex.png");
-      var pluginIcon = this.PluginInterface.UiBuilder.LoadImage(imagePath);
-      this.PluginUi = new PluginUI(this.Configuration, pluginIcon);
-
-      // Initialize the signature helper.
-      this.SigHelper = new SigHelper();
-
-      // Initialize the Game State Cache.
-      this.GameStateCache = GameStateCache.Load();
-
-      // Initialize the Chat GUI.
-      // Borrowrd from https://github.com/Bluefissure/MapLinker/blob/master/MapLinker/MapLinker.cs:51
-      this.ChatGui = Injections.Chat;
-
-      // Set the target system.
-      // Borrowed from https://github.com/fitzchivalrik/compass/blob/master/Compass/Compass.cs:74
-      _targetManager = Injections.TargetManager;
-      unsafe {
-        // Passes to _targetSystem in another partial class that needs to be unsafe: EmoteCmdComples.EmoteHandler.cs
-        _targetSystem = (TargetSystem*)_targetManager.Address;
-      }
-
-      // Add the command to the Dalamud instance.
-      _ = this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand) {
+    public EmoteCmdComplexPlugin(DalamudPluginInterface pluginInterface) {
+      Service.Initialize(pluginInterface);
+      Service.PluginInterface!.UiBuilder.Draw += Service.WindowSystem.Draw;
+      Service.PluginInterface!.UiBuilder.OpenConfigUi += DrawConfigUI;
+      Service.Configuration = Configuration.Load();
+      PluginUI = new PluginUI();
+      Service.Commands.AddHandler(CommandName, new CommandInfo(OnCommand) {
         HelpMessage = "Custom emote messages while using emote.\n/xlem (<t>) \"(Text for non-target mode)\" \"(Text for targeted mode)\""
       });
+      unsafe {
+        // Passes to _targetSystem in another partial class that needs to be unsafe: EmoteCmdComples.EmoteHandler.cs
+        _targetSystem = (TargetSystem*)Service.Targets.Address;
+      }
 
       // Add the Plugin interface when built on debug system.
-#if DEBUG
-      this.PluginInterface.UiBuilder.Draw += DrawUI;
-      this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
+#if (DEBUG)
+      DrawConfigUI();
 #endif
     }
 
@@ -151,8 +70,11 @@ namespace EmoteCmdComplex {
     /// VS2022 and Sonar Lint don't like the way it's written, so just ignore the warnings.
     /// </summary>
     public void Dispose() {
-      this.PluginUi.Dispose();
-      _ = this.CommandManager.RemoveHandler(CommandName);
+      PluginUI.Dispose();
+      Service.Configuration.Save();
+      Service.PluginInterface!.UiBuilder.Draw -= Service.WindowSystem.Draw;
+      Service.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
+      _ = Service.Commands.RemoveHandler(CommandName);
     }
 
     /// <summary>
@@ -182,7 +104,7 @@ namespace EmoteCmdComplex {
           return;
         }
         // Check if the player has the emote unlocked and if not return error.
-        if (GameStateCache.IsEmoteUnlocked(EmoteStrategy.GetEmoteByName(resultArgs[resultArgs.Count - 1]))) {
+        if (Service.GameStateCache.IsEmoteUnlocked(EmoteStrategy.GetEmoteByName(resultArgs[resultArgs.Count - 1]))) {
           RunCustomEmote(resultArgs[0], resultArgs[1], EmoteStrategy.GetEmoteByName(resultArgs[resultArgs.Count - 1]));
         } else {
           LogError($"The emote, {resultArgs[resultArgs.Count - 1]} isn't obtained by your account.");
@@ -192,19 +114,6 @@ namespace EmoteCmdComplex {
       else if (resultArgs.Count == 2) {
         RunCustomEmote(resultArgs[0], resultArgs[1]);
       }
-    }
-
-    /// <summary>
-    /// Check the full string for quotes. Command arguments should be passed to this.
-    /// No longer needed.
-    /// </summary>
-    /// <param name="arg">The command argument.</param>
-    /// <returns><see cref="true"/> if the command argument is surrounded by double quotes.</returns>
-    private static bool CheckFullString(string arg) {
-      if (arg[0] == '"' && arg[arg.Length - 1] == '"') {
-        return true;
-      }
-      return false;
     }
 
     // Logging functions
@@ -220,35 +129,29 @@ namespace EmoteCmdComplex {
     /// Log via Dalamud log and chat.
     /// </summary>
     /// <param name="message">The message to log.</param>
-    private void Log(string message) {
-      if (!Configuration.Debug) {
+    private static void Log(string message) {
+      if (!Service.Configuration.Debug) {
         LogStatic(message);
         return;
       }
       PluginLog.Log($"[DBG] {message}");
-      ChatGui.Print($"{message}");
+      Service.Chat.Print($"{message}");
     }
     /// <summary>
     /// Log an error via Dalamud log and chat.
     /// </summary>
     /// <param name="message">The message to log.</param>
-    public void LogError(string message) {
+    public static void LogError(string message) {
       PluginLog.LogError($"[ERR] {message}");
-      ChatGui.PrintError($"{message}");
-    }
-
-    /// <summary>
-    /// Draw the UI on demand.
-    /// </summary>
-    private void DrawUI() {
-      this.PluginUi.Draw();
+      Service.Chat.PrintError($"{message}");
     }
 
     /// <summary>
     /// Draw the configuration UI on demand.
     /// </summary>
     private void DrawConfigUI() {
-      this.PluginUi.SettingsVisible = true;
+      PluginUI.Draw();
+      PluginUI.SettingsVisible = true;
     }
   }
 }

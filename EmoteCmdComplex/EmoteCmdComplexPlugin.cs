@@ -47,20 +47,20 @@ namespace EmoteCmdComplex {
     /// <param name="targetManager">Dalamud Target Manager.</param>
     public EmoteCmdComplexPlugin(DalamudPluginInterface pluginInterface) {
       Service.Initialize(pluginInterface);
-      Service.PluginInterface!.UiBuilder.Draw += Service.WindowSystem.Draw;
-      Service.PluginInterface!.UiBuilder.OpenConfigUi += DrawConfigUI;
       Service.Configuration = Configuration.Load();
-      PluginUI = new PluginUI();
       Service.Commands.AddHandler(CommandName, new CommandInfo(OnCommand) {
         HelpMessage = "Custom emote messages while using emote.\n/xlem (<t>) \"(Text for non-target mode)\" \"(Text for targeted mode)\""
       });
       unsafe {
-        // Passes to _targetSystem in another partial class that needs to be unsafe: EmoteCmdComples.EmoteHandler.cs
+        // Passes to _targetSystem in another partial class that needs to be unsafe: EmoteCmdComplex.EmoteHandler.cs
         _targetSystem = (TargetSystem*)Service.Targets.Address;
       }
 
       // Add the Plugin interface when built on debug system.
 #if (DEBUG)
+      PluginUI = new PluginUI();
+      Service.PluginInterface!.UiBuilder.Draw += Service.WindowSystem.Draw;
+      Service.PluginInterface!.UiBuilder.OpenConfigUi += DrawConfigUI;
       DrawConfigUI();
 #endif
     }
@@ -70,10 +70,12 @@ namespace EmoteCmdComplex {
     /// VS2022 and Sonar Lint don't like the way it's written, so just ignore the warnings.
     /// </summary>
     public void Dispose() {
-      PluginUI.Dispose();
       Service.Configuration.Save();
+#if (DEBUG)
+      PluginUI.Dispose();
       Service.PluginInterface!.UiBuilder.Draw -= Service.WindowSystem.Draw;
       Service.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
+#endif
       _ = Service.Commands.RemoveHandler(CommandName);
     }
 

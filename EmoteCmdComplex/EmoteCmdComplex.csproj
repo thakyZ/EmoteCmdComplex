@@ -2,9 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>Neko Boi Nick</Authors>
-    <Version>1.0.2.3</Version>
+    <Version>1.0.2.4</Version>
     <Description>This plugin adds a command so that you can have more complex custom emotes.\nSuch as if you want to have one macro do an emote on a targeting and non-targeting basis.</Description>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Configurations>Release;Debug</Configurations>
     <PackageProjectUrl>https://github.com/thakyZ/EmoteCmdComplex-dalamud</PackageProjectUrl>
     <Platforms>x64</Platforms>
@@ -80,7 +80,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.8"/>
+    <PackageReference Include="DalamudPackager" Version="2.1.10"/>
     <PackageReference Include="ILRepack" Version="2.0.18" GeneratePathProperty="true"/>
     <PackageReference Include="Microsoft.VisualStudio.VsixColorCompiler" Version="17.3.32803.156"/>
   </ItemGroup>

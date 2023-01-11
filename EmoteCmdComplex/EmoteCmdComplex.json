@@ -9,7 +9,7 @@
   "Tags": [
     "Social"
   ],
-  "DalamudApiVersion": 7,
+  "DalamudApiVersion": 8,
   "IconUrl": "https://raw.githubusercontent.com/thakyZ/EmoteCmdComplex-dalamud/main/EmoteCmdComplex/images/EmoteCmdComplex.png",
-  "Changelog": "Updated to API 7"
+  "Changelog": "Updated to API 8"
 }

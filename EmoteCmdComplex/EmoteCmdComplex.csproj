@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Authors>Neko Boi Nick</Authors>
-    <Version>1.0.2.4</Version>
+    <Version>1.0.2.5</Version>
     <Description>This plugin adds a command so that you can have more complex custom emotes.\nSuch as if you want to have one macro do an emote on a targeting and non-targeting basis.</Description>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Configurations>Release;Debug</Configurations>

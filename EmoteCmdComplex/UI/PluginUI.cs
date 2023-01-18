@@ -29,14 +29,14 @@ namespace EmoteCmdComplex.UI {
     }
 
     // passing in the image here just for simplicity
-    public PluginUI() : base($"{Service.PluginName} Settings") {
-      Service.WindowSystem.AddWindow(this);
-      this.configuration = Service.Configuration;
+    public PluginUI() : base($"{EmoteCmdComplexPlugin.PluginName} Settings") {
+      EmoteCmdComplexPlugin.Instance.WindowSystem.AddWindow(this);
+      this.configuration = EmoteCmdComplexPlugin.Instance.Configuration;
     }
 
     public void Dispose() {
-      Service.Configuration.Save();
-      Service.WindowSystem.RemoveWindow(this);
+      EmoteCmdComplexPlugin.Instance.Configuration.Save();
+      EmoteCmdComplexPlugin.Instance.WindowSystem.RemoveWindow(this);
     }
 
     public override void Draw() {
@@ -51,7 +51,7 @@ namespace EmoteCmdComplex.UI {
         this.configuration.Save();
       }
       ImGui.Indent();
-      if (Service.Configuration.Debug) {
+      if (EmoteCmdComplexPlugin.Instance.Configuration.Debug) {
         ImGui.TextColored(ImGuiColors.HealerGreen, fmt: "Debug Enabled");
       } else {
         ImGui.TextColored(ImGuiColors.DalamudRed, "Debug Disabled");
@@ -62,7 +62,7 @@ namespace EmoteCmdComplex.UI {
 
     public override void OnClose() {
       settingsVisible = false;
-      Service.Configuration.Save();
+      EmoteCmdComplexPlugin.Instance.Configuration.Save();
     }
   }
 }

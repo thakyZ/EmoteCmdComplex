@@ -1,11 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 
-using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
-using Dalamud.Game.Gui;
-using Dalamud.IoC;
+using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
 using Dalamud.Plugin;
 
@@ -14,7 +11,6 @@ using EmoteCmdComplex.Base;
 using EmoteCmdComplex.Game;
 using EmoteCmdComplex.UI;
 
-using FFXIVClientStructs;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 
 /// <summary>
@@ -25,6 +21,7 @@ namespace EmoteCmdComplex {
   /// Main plugin Class.
   /// </summary>
   public partial class EmoteCmdComplexPlugin : IDalamudPlugin {
+    internal static EmoteCmdComplexPlugin Instance { get; private set; } = null!;
     /// <summary>
     /// The name of the plugin.
     /// </summary>
@@ -37,6 +34,30 @@ namespace EmoteCmdComplex {
     /// Plugin UI Manager
     /// </summary>
     private static PluginUI PluginUI = null!;
+    /// <summary>
+    /// 
+    /// </summary>
+    internal GameStateCache GameStateCache { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public static string PluginName = "EmoteCmdComplex";
+    /// <summary>
+    /// 
+    /// </summary>
+    public Configuration Configuration { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public SigHelper SigHelper { get; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public WindowSystem WindowSystem { get; } = new WindowSystem(PluginName);
+    /// <summary>
+    /// 
+    /// </summary>
+    private DalamudPluginInterface PluginInterface { get; }
 
     /// <summary>
     /// The constructor for the plugin.
@@ -46,8 +67,10 @@ namespace EmoteCmdComplex {
     /// <param name="chat">Dalamud Chat Manager.</param>
     /// <param name="targetManager">Dalamud Target Manager.</param>
     public EmoteCmdComplexPlugin(DalamudPluginInterface pluginInterface) {
-      Service.Initialize(pluginInterface);
-      Service.Configuration = Configuration.Load();
+      pluginInterface.Create<Service>();
+      Instance = this;
+      this.PluginInterface = pluginInterface;
+      this.Configuration = Configuration.Load();
       Service.Commands.AddHandler(CommandName, new CommandInfo(OnCommand) {
         HelpMessage = "Custom emote messages while using emote.\n/xlem (<t>) \"(Text for non-target mode)\" \"(Text for targeted mode)\""
       });
@@ -55,11 +78,13 @@ namespace EmoteCmdComplex {
         // Passes to _targetSystem in another partial class that needs to be unsafe: EmoteCmdComplex.EmoteHandler.cs
         _targetSystem = (TargetSystem*)Service.Targets.Address;
       }
+      this.SigHelper = new SigHelper();
+      this.GameStateCache = new GameStateCache();
 
       // Add the Plugin interface when built on debug system.
 #if (DEBUG)
       PluginUI = new PluginUI();
-      Service.PluginInterface!.UiBuilder.Draw += Service.WindowSystem.Draw;
+      Service.PluginInterface!.UiBuilder.Draw += this.WindowSystem.Draw;
       Service.PluginInterface!.UiBuilder.OpenConfigUi += DrawConfigUI;
       DrawConfigUI();
 #endif
@@ -70,10 +95,10 @@ namespace EmoteCmdComplex {
     /// VS2022 and Sonar Lint don't like the way it's written, so just ignore the warnings.
     /// </summary>
     public void Dispose() {
-      Service.Configuration.Save();
+      this.Configuration.Save();
 #if (DEBUG)
       PluginUI.Dispose();
-      Service.PluginInterface!.UiBuilder.Draw -= Service.WindowSystem.Draw;
+      Service.PluginInterface!.UiBuilder.Draw -= this.WindowSystem.Draw;
       Service.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
 #endif
       _ = Service.Commands.RemoveHandler(CommandName);
@@ -106,7 +131,7 @@ namespace EmoteCmdComplex {
           return;
         }
         // Check if the player has the emote unlocked and if not return error.
-        if (Service.GameStateCache.IsEmoteUnlocked(EmoteStrategy.GetEmoteByName(resultArgs[resultArgs.Count - 1]))) {
+        if (GameStateCache.IsEmoteUnlocked(EmoteStrategy.GetEmoteByName(resultArgs[resultArgs.Count - 1]))) {
           RunCustomEmote(resultArgs[0], resultArgs[1], EmoteStrategy.GetEmoteByName(resultArgs[resultArgs.Count - 1]));
         } else {
           LogError($"The emote, {resultArgs[resultArgs.Count - 1]} isn't obtained by your account.");
@@ -132,7 +157,7 @@ namespace EmoteCmdComplex {
     /// </summary>
     /// <param name="message">The message to log.</param>
     private static void Log(string message) {
-      if (!Service.Configuration.Debug) {
+      if (!EmoteCmdComplexPlugin.Instance.Configuration.Debug) {
         LogStatic(message);
         return;
       }

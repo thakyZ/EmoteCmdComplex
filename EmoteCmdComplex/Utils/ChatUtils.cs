@@ -15,9 +15,9 @@ namespace EmoteCmdComplex.Utils {
 
       // Sanitization rules
       text = text.Replace("\n", " ");
-      text = Service.SigHelper.GetSanitizedString(text);
+      text = EmoteCmdComplexPlugin.Instance.SigHelper.GetSanitizedString(text);
 
-      Service.SigHelper.SendChatMessage(text);
+      EmoteCmdComplexPlugin.Instance.SigHelper.SendChatMessage(text);
     }
   }
 }

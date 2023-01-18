@@ -4,6 +4,7 @@ using EmoteCmdComplex.Base;
 
 using Lumina.Excel.GeneratedSheets;
 using EmoteCmdComplex.Game;
+using Dalamud.Logging;
 
 namespace EmoteCmdComplex.ActionExecutor.Strategies {
   /// <summary>
@@ -27,12 +28,17 @@ namespace EmoteCmdComplex.ActionExecutor.Strategies {
     }
 
     internal static uint GetEmoteByName(string name) {
-      Service.GameStateCache!.Refresh();
-      var emotes = Service.GameStateCache!.UnlockedEmotes!.Select(GetExecutableAction).ToList();
+      if (EmoteCmdComplexPlugin.Instance.GameStateCache is null || EmoteCmdComplexPlugin.Instance.GameStateCache.UnlockedEmotes is null) {
+        return 0;
+      }
+      EmoteCmdComplexPlugin.Instance.GameStateCache.Refresh();
+      var emotes = EmoteCmdComplexPlugin.Instance.GameStateCache.UnlockedEmotes.Select(GetExecutableAction).ToList();
 
       if (emotes == null || emotes.Count == 0) {
         return 0;
       }
+
+      PluginLog.Information(string.Join(",", emotes));
 
       var actionId = emotes.Find(match: e => e.TextCommand is not null && e.TextCommand == $"/{name}");
       return actionId is not null ? actionId.ActionId : 0;

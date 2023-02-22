@@ -6,7 +6,7 @@ using Dalamud.Plugin;
 /// <summary>
 /// Main plugin configuration implementation.
 /// </summary>
-namespace EmoteCmdComplex.Base {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base {
   /// <summary>
   /// Main plugin configuration class.
   /// </summary>
@@ -27,7 +27,7 @@ namespace EmoteCmdComplex.Base {
     /// </summary>
     /// <param name="pluginInterface">The plugin interface from the main plugin implementation.</param>
     public static Configuration Load() {
-        if (Service.PluginInterface.GetPluginConfig() is Configuration config)
+        if (Services.PluginInterface.GetPluginConfig() is Configuration config)
         {
             return config;
         }
@@ -41,7 +41,7 @@ namespace EmoteCmdComplex.Base {
     /// Saves the plugin configuration to file.
     /// </summary>
     public void Save() {
-      Service.PluginInterface!.SavePluginConfig(this);
+      Services.PluginInterface!.SavePluginConfig(this);
     }
   }
 }

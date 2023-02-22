@@ -3,10 +3,10 @@ using System.Data;
 
 using Dalamud.Game.Text.SeStringHandling.Payloads;
 
-using EmoteCmdComplex.ActionExecutor.Strategies;
-using EmoteCmdComplex.Base;
-using EmoteCmdComplex.Game;
-using EmoteCmdComplex.Utils;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Utils;
 
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 
@@ -17,7 +17,7 @@ using ImGuizmoNET;
 using Lumina.Excel.GeneratedSheets;
 using System.Linq;
 
-namespace EmoteCmdComplex {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
   public unsafe partial class EmoteCmdComplexPlugin {
     private readonly TargetSystem* _targetSystem;
     private static bool ContainsPlaceholder(string text) {
@@ -40,7 +40,7 @@ namespace EmoteCmdComplex {
         }
         if (isTargeting) {
           if (ContainsPlaceholder(targetText)) {
-            _ = Service.Framework.RunOnFrameworkThread(delegate {
+            _ = Services.Framework.RunOnFrameworkThread(delegate {
               ChatUtils.SendSanitizedChatMessage($"/em {targetText}");
               ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
             });
@@ -48,7 +48,7 @@ namespace EmoteCmdComplex {
             LogError("Target placeholder not detected in the target text argument.");
           }
         } else {
-          _ = Service.Framework.RunOnFrameworkThread(delegate {
+          _ = Services.Framework.RunOnFrameworkThread(delegate {
             ChatUtils.SendSanitizedChatMessage($"/em {singleText}");
             ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
           });
@@ -56,14 +56,14 @@ namespace EmoteCmdComplex {
       } else {
         if (isTargeting) {
           if (ContainsPlaceholder(targetText)) {
-            _ = Service.Framework.RunOnFrameworkThread(delegate {
+            _ = Services.Framework.RunOnFrameworkThread(delegate {
               ChatUtils.SendSanitizedChatMessage($"/em {targetText}");
             });
           } else {
             LogError("Target placeholder not detected in the target text argument.");
           }
         } else {
-          _ = Service.Framework.RunOnFrameworkThread(delegate {
+          _ = Services.Framework.RunOnFrameworkThread(delegate {
             ChatUtils.SendSanitizedChatMessage($"/em {singleText}");
           });
         }

@@ -5,14 +5,14 @@ using System.Linq;
 using Dalamud.Memory;
 using Dalamud.Utility.Signatures;
 
-using EmoteCmdComplex.Base;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
 
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
 using Lumina.Excel.GeneratedSheets;
 
-namespace EmoteCmdComplex.Game {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game {
   /// <summary>
   /// The game state data. Loaded from binary signatures.
   /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/GameStateCache.cs
@@ -33,7 +33,7 @@ namespace EmoteCmdComplex.Game {
     /*internal bool IsEmoteUnlocked(uint emoteId) {
       if (this._isEmoteUnlocked == null) return false;
 
-      var emote = Service.DataManager.Excel.GetSheet<Emote>()!.GetRow(emoteId);
+      var emote = Services.DataManager.Excel.GetSheet<Emote>()!.GetRow(emoteId);
       if (emote == null || emote.Order == 0) return false;
 
       return emote.UnlockLink == 0 || (this._isEmoteUnlocked(UIState.Instance(), emote.UnlockLink, 1) > 0);
@@ -41,8 +41,7 @@ namespace EmoteCmdComplex.Game {
 
     internal static bool IsEmoteUnlocked(Emote? emote) {
         // Work around showing emotes if nobody is logged in.
-        if (!Service.ClientState.IsLoggedIn) return false;
-        
+        if (!Services.ClientState.IsLoggedIn) return false;
         // WARNING: This is a reimplementation of UIState#IsEmoteUnlocked, but designed to hopefully be a bit faster and
         // more reliable. As a result, this is not exactly faithful to how the game does it, but the logic is the same.
         // Particularly:
@@ -52,7 +51,6 @@ namespace EmoteCmdComplex.Game {
         //    now) functionally identical to IULUOQC with the default arguments.
         // Both of these decisions *should* be safe, but are being recorded here for posterity for when Square decides
         // to blow all this up.
-        
         if (emote == null || emote.Order == 0) return false;
 
         // HACK - We need to handle GC emotes as a special case
@@ -62,12 +60,12 @@ namespace EmoteCmdComplex.Game {
             case 57 when PlayerState.Instance()->GrandCompany != 3: // Immortal Flames
                 return false;
         }
-        
-        return emote.UnlockLink == 0 || UIState.Instance()->IsUnlockLinkUnlockedOrQuestCompleted(emote.UnlockLink);
+
+        return emote.UnlockLink == 0 || IsUnlockLinkUnlockedOrQuestCompleted(emote.UnlockLink);
     }
 
     internal static bool IsEmoteUnlocked(uint emoteId) {
-      var emote = Service.DataManager.Excel.GetSheet<Emote>()!.GetRow(emoteId);
+      var emote = Services.DataManager.Excel.GetSheet<Emote>()!.GetRow(emoteId);
       if (emote is null) {
         return false;
       }
@@ -81,7 +79,7 @@ namespace EmoteCmdComplex.Game {
 
     //public void Refresh() {
     //  if (this._isEmoteUnlocked != null) {
-    //    this.UnlockedEmotes = Service.DataManager.GetExcelSheet<Emote>()!
+    //    this.UnlockedEmotes = Services.DataManager.GetExcelSheet<Emote>()!
     //        .Where(x => this.IsEmoteUnlocked(x.RowId)).ToList();
     //  }
     //}
@@ -91,7 +89,7 @@ namespace EmoteCmdComplex.Game {
     }
 
     internal void Refresh() {
-        this.UnlockedEmotes = Service.DataManager.GetExcelSheet<Emote>()!
+        this.UnlockedEmotes = Services.DataManager.GetExcelSheet<Emote>()!
             .Where(x => x.IsUnlocked()).ToList();
     }
   }

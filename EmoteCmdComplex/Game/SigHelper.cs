@@ -4,13 +4,13 @@ using System.Text;
 
 using Dalamud.Utility.Signatures;
 
-using EmoteCmdComplex.Game.Structs;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game.Structs;
 
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 
-namespace EmoteCmdComplex.Game {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game {
   /// <summary>
   /// Signature helper for chat, mainly. Used for sending chat messages.
   /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/SigHelper.cs

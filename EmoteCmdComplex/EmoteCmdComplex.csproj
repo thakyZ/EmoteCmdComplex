@@ -1,43 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <Version>1.0.2.6</Version>
+    <Company></Company>
     <Authors>Neko Boi Nick</Authors>
-    <Version>1.0.2.5</Version>
-    <Description>This plugin adds a command so that you can have more complex custom emotes.\nSuch as if you want to have one macro do an emote on a targeting and non-targeting basis.</Description>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <Configurations>Release;Debug</Configurations>
+    <Description>
+      This plugin adds a command so that you can have more complex custom emotes.
+      Such as if you want to have one macro do an emote on a targeting and non-targeting basis.
+    </Description>
     <PackageProjectUrl>https://github.com/thakyZ/EmoteCmdComplex-dalamud</PackageProjectUrl>
-    <Platforms>x64</Platforms>
-    <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <LangVersion>latest</LangVersion>
-    <OutputPath>bin\$(Configuration)</OutputPath>
-    <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <DebugType>none</DebugType>
-    <DebugSymbols>false</DebugSymbols>
+    <Copyright></Copyright>
+    <AssemblyTitle>Better Minion Roulette</AssemblyTitle>
   </PropertyGroup>
 
   <PropertyGroup>
+    <AssemblyName>$(AssemblyTitle)</AssemblyName>
+    <Title>$(AssemblyTitle)</Title>
+    <Product>$(AssemblyTitle)</Product>
+    <PluginVersion>$(Version)</PluginVersion>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Platforms>x64</Platforms>
+    <Configurations>Release;Debug</Configurations>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>latest</LangVersion>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>bin\$(Configuration)</OutputPath>
+    <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.$(AssemblyTitle.Replace(" ", "_"))</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
   <PropertyGroup>
     <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-    <Dalamud>$(DALAMUD_HOME)</Dalamud>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(IsCI)' == 'true'">
@@ -45,6 +68,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="DalamudPackager" Version="2.1.10"/>
     <Reference Include="Dalamud">
       <HintPath>$(DalamudLibPath)\Dalamud.dll</HintPath>
       <Private>false</Private>
@@ -80,11 +104,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.10"/>
-    <PackageReference Include="ILRepack" Version="2.0.18" GeneratePathProperty="true"/>
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="EmoteCmdComplex.yaml">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
@@ -95,4 +114,14 @@
     <EditorConfigFiles Remove="..\.editorconfig"/>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
+
+  <Target Name="CleanOutDir" AfterTargets="Build">
+    <ItemGroup>
+      <DeleteAssemblies Include="$(TargetDir)*.pdb" />
+      <DeleteAssemblies Include="$(TargetDir)$(AssemblyName).deps.json" />
+    </ItemGroup>
+    <Message Text="Deleting @(DeleteAssemblies)" Importance="high" />
+    <Delete Files="@(DeleteAssemblies)" />
+    <RemoveDir Directories="$(TargetDir)\ref\" />
+  </Target>
 </Project>

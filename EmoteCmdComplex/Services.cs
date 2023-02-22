@@ -14,9 +14,8 @@ using Dalamud.Data;
 using Dalamud.Game;
 using Dalamud.Game.ClientState;
 
-namespace EmoteCmdComplex {
-  public class Service {
-
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
+  public class Services {
     [PluginService][RequiredVersion("1.0")] public static DalamudPluginInterface PluginInterface { get; set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static ChatGui Chat { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static CommandManager Commands { get; private set; } = null!;
@@ -25,5 +24,5 @@ namespace EmoteCmdComplex {
     [PluginService][RequiredVersion("1.0")] public static SigScanner SigScanner { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static DataManager DataManager { get; private set; } = null!;
     [PluginService][RequiredVersion("1.0")] public static Framework Framework { get; private set; } = null!;
-  } 
+  }
 }

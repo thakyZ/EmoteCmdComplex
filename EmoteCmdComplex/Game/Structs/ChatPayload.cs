@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace EmoteCmdComplex.Game.Structs {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game.Structs {
   /// <summary>
   /// The payload for what to send to chat.
   /// Borrowed from: https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/Game/Structs/ChatPayload.cs

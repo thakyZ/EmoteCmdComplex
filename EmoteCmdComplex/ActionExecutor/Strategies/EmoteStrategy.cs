@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 
-using EmoteCmdComplex.Base;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
 
 using Lumina.Excel.GeneratedSheets;
-using EmoteCmdComplex.Game;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game;
 using Dalamud.Logging;
 
-namespace EmoteCmdComplex.ActionExecutor.Strategies {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies {
   /// <summary>
   /// Emote utility file and functions.
   /// Borrowed from https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/ActionExecutor/Strategies/EmoteStrategy.cs
@@ -24,7 +24,7 @@ namespace EmoteCmdComplex.ActionExecutor.Strategies {
       };
     }
     internal static Emote? GetEmoteById(uint id) {
-      return Service.DataManager.Excel.GetSheet<Emote>()!.GetRow(id);
+      return Services.DataManager.Excel.GetSheet<Emote>()!.GetRow(id);
     }
 
     internal static uint GetEmoteByName(string name) {

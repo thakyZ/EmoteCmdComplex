@@ -5,24 +5,24 @@ using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 
-using EmoteCmdComplex.Base;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
 
 using ImGuiNET;
 
-namespace EmoteCmdComplex.UI {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.UI {
   // It is good to have this be disposable in general, in case you ever need it
   // to do any cleanup
   public class PluginUI : Window, IDisposable {
-    private Configuration configuration;
+    private readonly Configuration configuration;
 
     // this extra boolean exists for ImGui, since you can't ref a property
-    private bool visible = false;
+    private bool visible;
     public bool Visible {
       get { return this.visible; }
       set { this.visible = value; }
     }
 
-    private bool settingsVisible = false;
+    private bool settingsVisible;
     public bool SettingsVisible {
       get { return this.settingsVisible; }
       set { this.settingsVisible = value; }

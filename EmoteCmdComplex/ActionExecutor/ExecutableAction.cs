@@ -4,7 +4,7 @@ using Lumina.Excel.GeneratedSheets;
 
 using Newtonsoft.Json;
 
-namespace EmoteCmdComplex.ActionExecutor {
+namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor {
   /// <summary>
   /// A class for returning Action data from Lumina.
   /// Borrowed from https://github.com/KazWolfe/XIVDeck/blob/main/FFXIVPlugin/ActionExecutor/ExecutableAction.cs

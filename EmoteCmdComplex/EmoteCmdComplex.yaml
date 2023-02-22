@@ -9,5 +9,5 @@ repo_url: https://github.com/thakyZ/EmoteCmdComplex-dalamud
 applicable_version: any
 tags:
   - Social
-icon_url: "https://raw.githubusercontent.com/thakyZ/MyDalamudPlugins/main/plugins/EmoteCmdComplex/images/icon.png"
-changelog: Updated to API 8
+icon_url: https://raw.githubusercontent.com/thakyZ/MyDalamudPlugins/main/plugins/EmoteCmdComplex/images/icon.png
+changelog: Refactored Code.

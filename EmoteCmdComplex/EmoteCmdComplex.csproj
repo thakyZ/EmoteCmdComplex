@@ -82,21 +82,17 @@
   <ItemGroup>
     <PackageReference Include="DalamudPackager" Version="2.1.10"/>
     <PackageReference Include="ILRepack" Version="2.0.18" GeneratePathProperty="true"/>
-    <PackageReference Include="Microsoft.VisualStudio.VsixColorCompiler" Version="17.3.32803.156"/>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="EmoteCmdComplex.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="EmoteCmdComplex.yaml">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Content>
     <Folder Include="images\"/>
-    <Content Include="..\README.md" CopyToOutputDirectory="Always"/>
-    <Content Include="..\LICENSE" CopyToOutputDirectory="Always"/>
+    <Content Include="..\README.md" CopyToOutputDirectory="Never"/>
+    <Content Include="..\LICENSE" CopyToOutputDirectory="Never"/>
     <Content Include="..\.gitignore" CopyToOutputDirectory="Never"/>
-  </ItemGroup>
-
-  <ItemGroup>
     <EditorConfigFiles Remove="..\.editorconfig"/>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
-
 </Project>

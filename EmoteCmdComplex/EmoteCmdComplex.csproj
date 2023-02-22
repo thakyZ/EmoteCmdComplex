@@ -10,13 +10,13 @@
     </Description>
     <PackageProjectUrl>https://github.com/thakyZ/EmoteCmdComplex-dalamud</PackageProjectUrl>
     <Copyright></Copyright>
-    <AssemblyTitle>Better Minion Roulette</AssemblyTitle>
+    <Title>Emote Command Complex</Title>
   </PropertyGroup>
 
   <PropertyGroup>
-    <AssemblyName>$(AssemblyTitle)</AssemblyName>
-    <Title>$(AssemblyTitle)</Title>
-    <Product>$(AssemblyTitle)</Product>
+    <AssemblyTitle>$(Title)</AssemblyTitle>
+    <AssemblyName>$(Title.Replace(" ", "").Replace("Command", "Cmd"))</AssemblyName>
+    <Product>$(Title)</Product>
     <PluginVersion>$(Version)</PluginVersion>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
@@ -36,7 +36,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>bin\$(Configuration)</OutputPath>
-    <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.$(AssemblyTitle.Replace(" ", "_"))</RootNamespace>
+    <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.$(Title.Replace(" ", "").Replace("Command", "Cmd"))</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">

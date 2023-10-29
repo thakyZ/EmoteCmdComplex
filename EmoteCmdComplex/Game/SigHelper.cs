@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
 using Dalamud.Utility.Signatures;
 
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game.Structs;
-
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
+
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game.Structs;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game {
   /// <summary>
@@ -32,7 +32,6 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game {
     /***** the actual class *****/
 
     internal SigHelper() {
-      SignatureHelper.Initialise(this);
     }
 
     public void Dispose() {

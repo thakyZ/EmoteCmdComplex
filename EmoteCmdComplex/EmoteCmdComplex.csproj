@@ -15,7 +15,6 @@
 
   <PropertyGroup>
     <AssemblyTitle>$(Title)</AssemblyTitle>
-    <AssemblyName>$(Title.Replace(" ", "").Replace("Command", "Cmd"))</AssemblyName>
     <Product>$(Title)</Product>
     <PluginVersion>$(Version)</PluginVersion>
     <FileVersion>$(Version)</FileVersion>
@@ -26,36 +25,35 @@
     <TargetFramework>net7.0-windows</TargetFramework>
     <Platforms>x64</Platforms>
     <Configurations>Release;Debug</Configurations>
-    <Nullable>enable</Nullable>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>latest</LangVersion>
-    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <Nullable>Enable</Nullable>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <LangVersion>Latest</LangVersion>
+    <GenerateDependencyFile>False</GenerateDependencyFile>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>bin\$(Configuration)</OutputPath>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
+    <RestorePackagesWithLockFile>True</RestorePackagesWithLockFile>
+    <CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
+    <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
     <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.$(Title.Replace(" ", "").Replace("Command", "Cmd"))</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <DebugType>pdbonly</DebugType>
-    <DebugSymbols>false</DebugSymbols>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <Optimize>True</Optimize>
+    <OutputPath>$(ProjectDir)bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
+    <ErrorReport>Prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
+    <Optimize>False</Optimize>
+    <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
+    <BaseOutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</BaseOutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
+    <ErrorReport>Prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
@@ -103,14 +101,23 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
     <Content Include="$(ProjectDir)$(MSBuildProjectName).yaml" CopyToOutputDirectory="Never" />
-    <Folder Include="images\" />
-    <Content Include="..\README.md" CopyToOutputDirectory="Never" />
-    <Content Include="..\LICENSE" CopyToOutputDirectory="Never" />
-    <Content Include="..\.gitignore" CopyToOutputDirectory="Never" />
-    <EditorConfigFiles Remove="..\.editorconfig" />
-    <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Remove="$(ProjectDir)$(MSBuildProjectName)2.yaml" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <None Remove="$(ProjectDir)$(MSBuildProjectName).yaml" />
+    <Content Include="$(ProjectDir)$(MSBuildProjectName)2.yaml" CopyToOutputDirectory="Never" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="$(ProjectDir)images\" />
+    <Content Include="$(SolutionDir)\README.md" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir)\LICENSE" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir)\.gitignore" CopyToOutputDirectory="Never" />
+    <EditorConfigFiles Remove="$(SolutionDir)\.editorconfig" />
+    <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <Target Name="CleanOutDir" AfterTargets="Build">

@@ -11,6 +11,8 @@ tab_width = 2
 insert_final_newline = true
 end_of_line = crlf
 charset = utf-8
+vsspell_section_id = ff7c132e923a41699dbc559eb97102ab
+vsspell_exclusion_expressions_ff7c132e923a41699dbc559eb97102ab = (?:Neko)(?=BoiNick)(?@@PND@@/Options/Singleline)(?<=Neko)(?:Boi)(?=Nick)(?@@PND@@/Options/None)\bFFXIV\b(?@@PND@@/Options/None)
 
 ###############################
 # .NET Coding Conventions     #

@@ -1,17 +1,13 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using Dalamud.Game.Command;
-using Dalamud.Interface.Windowing;
-using Dalamud.Logging;
 using Dalamud.Plugin;
 
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies;
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game;
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.UI;
-
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
+
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game;
 
 /// <summary>
 /// Main plugin implementation.
@@ -20,54 +16,23 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
   /// <summary>
   /// Main plugin Class.
   /// </summary>
-  public partial class EmoteCmdComplexPlugin : IDalamudPlugin {
-    internal static EmoteCmdComplexPlugin Instance { get; private set; } = null!;
+  public partial class Plugin : IDalamudPlugin {
     /// <summary>
-    /// The name of the plugin.
+    /// The static instance of the name of the plugin.
     /// </summary>
-    public string Name => "Emote Command Complex";
+    public static string Name => "EmoteCmdComplex";
     /// <summary>
     /// The command for the plugin.
     /// </summary>
     private const string CommandName = "/xlem";
-    /// <summary>
-    /// Plugin UI Manager
-    /// </summary>
-    private static PluginUI PluginUI = null!;
-    /// <summary>
-    /// The game's state cache.
-    /// </summary>
-    internal GameStateCache GameStateCache { get; }
-    /// <summary>
-    /// The plugin's name.
-    /// </summary>
-    public static string PluginName = "EmoteCmdComplex";
-    /// <summary>
-    /// The configuration of the plugin.
-    /// </summary>
-    public Configuration Configuration { get; }
-    /// <summary>
-    /// The signature helper class.
-    /// </summary>
-    public SigHelper SigHelper { get; }
-    /// <summary>
-    /// The window system.
-    /// </summary>
-    public WindowSystem WindowSystem { get; } = new WindowSystem(PluginName);
-    /// <summary>
-    /// The instanced <see cref="DalamudPluginInterface"/>
-    /// </summary>
-    private DalamudPluginInterface PluginInterface { get; }
 
     /// <summary>
     /// The constructor for the plugin.
     /// </summary>
     /// <param name="pluginInterface">Dalamud Plugin Interface.</param>
-    public EmoteCmdComplexPlugin(DalamudPluginInterface pluginInterface) {
+    public Plugin(DalamudPluginInterface pluginInterface) {
       pluginInterface.Create<Services>();
-      Instance = this;
-      this.PluginInterface = pluginInterface;
-      this.Configuration = Configuration.Load();
+      Services.Init(this);
       Services.Commands.AddHandler(CommandName, new CommandInfo(OnCommand) {
         HelpMessage = "Custom emote messages while using emote.\n/xlem (<t>) \"(Text for non-target mode)\" \"(Text for targeted mode)\""
       });
@@ -75,13 +40,9 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
         // Passes to _targetSystem in another partial class that needs to be unsafe: EmoteCmdComplex.EmoteHandler.cs
         _targetSystem = (TargetSystem*)Services.Targets.Address;
       }
-      this.SigHelper = new SigHelper();
-      this.GameStateCache = new GameStateCache();
 
       // Add the Plugin interface when built on debug system.
 #if DEBUG
-      PluginUI = new PluginUI();
-      Services.PluginInterface!.UiBuilder.Draw += this.WindowSystem.Draw;
       Services.PluginInterface!.UiBuilder.OpenConfigUi += DrawConfigUI;
       DrawConfigUI();
 #endif
@@ -92,10 +53,8 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
     /// VS2022 and Sonar Lint don't like the way it's written, so just ignore the warnings.
     /// </summary>
     public void Dispose() {
-      this.Configuration.Save();
+      Services.Configuration.Save();
 #if DEBUG
-      PluginUI.Dispose();
-      Services.PluginInterface!.UiBuilder.Draw -= this.WindowSystem.Draw;
       Services.PluginInterface.UiBuilder.OpenConfigUi -= DrawConfigUI;
 #endif
       _ = Services.Commands.RemoveHandler(CommandName);
@@ -147,18 +106,18 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
     /// </summary>
     /// <param name="message">The message to log.</param>
     private static void LogStatic(string message) {
-      PluginLog.Log($"[INF] {message}");
+      Services.Log.Info($"[INF] {message}");
     }
     /// <summary>
     /// Log via Dalamud log and chat.
     /// </summary>
     /// <param name="message">The message to log.</param>
     private static void Log(string message) {
-      if (!EmoteCmdComplexPlugin.Instance.Configuration.Debug) {
+      if (!Services.Configuration.Debug) {
         LogStatic(message);
         return;
       }
-      PluginLog.Log($"[DBG] {message}");
+      Services.Log.Info($"[DBG] {message}");
       Services.Chat.Print($"{message}");
     }
     /// <summary>
@@ -166,7 +125,7 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
     /// </summary>
     /// <param name="message">The message to log.</param>
     public static void LogError(string message) {
-      PluginLog.LogError($"[ERR] {message}");
+      Services.Log.Error($"[ERR] {message}");
       Services.Chat.PrintError($"{message}");
     }
 
@@ -174,8 +133,8 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
     /// Draw the configuration UI on demand.
     /// </summary>
     private void DrawConfigUI() {
-      PluginUI.Draw();
-      PluginUI.SettingsVisible = true;
+      Services.PluginUI.Draw();
+      Services.PluginUI.SettingsVisible = true;
     }
   }
 }

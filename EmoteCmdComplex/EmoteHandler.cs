@@ -1,24 +1,14 @@
-﻿using System;
+using System;
 using System.Data;
-
-using Dalamud.Game.Text.SeStringHandling.Payloads;
-
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies;
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game;
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Utils;
+using System.Linq;
 
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 
-using ImGuiNET;
-
-using ImGuizmoNET;
-
-using Lumina.Excel.GeneratedSheets;
-using System.Linq;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies;
+using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Utils;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
-  public unsafe partial class EmoteCmdComplexPlugin {
+  public unsafe partial class Plugin {
     private readonly TargetSystem* _targetSystem;
     private static bool ContainsPlaceholder(string text) {
       var placeholders = new string[] {
@@ -34,37 +24,35 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
       var isTargeting = _targetSystem->GetCurrentTarget() is not null;
 
       if (emoteId != 0) {
-        var emote = EmoteStrategy.GetEmoteById(emoteId);
-        if (emote is null) {
-          throw new ArgumentNullException($"Emote not found... ID: [{emoteId}]");
-        }
+        var emote = EmoteStrategy.GetEmoteById(emoteId) ?? throw new ArgumentNullException($"Emote not found... ID: [{emoteId}]");
+
         if (isTargeting) {
           if (ContainsPlaceholder(targetText)) {
             _ = Services.Framework.RunOnFrameworkThread(delegate {
-              ChatUtils.SendSanitizedChatMessage($"/em {targetText}");
-              ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
+              ChatUtils.GetInstance().SendSanitizedChatMessage($"/em {targetText}");
+              ChatUtils.GetInstance().SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
             });
           } else {
             LogError("Target placeholder not detected in the target text argument.");
           }
         } else {
           _ = Services.Framework.RunOnFrameworkThread(delegate {
-            ChatUtils.SendSanitizedChatMessage($"/em {singleText}");
-            ChatUtils.SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
+            ChatUtils.GetInstance().SendSanitizedChatMessage($"/em {singleText}");
+            ChatUtils.GetInstance().SendSanitizedChatMessage($"{emote.TextCommand?.Value?.Command} motion");
           });
         }
       } else {
         if (isTargeting) {
           if (ContainsPlaceholder(targetText)) {
             _ = Services.Framework.RunOnFrameworkThread(delegate {
-              ChatUtils.SendSanitizedChatMessage($"/em {targetText}");
+              ChatUtils.GetInstance().SendSanitizedChatMessage($"/em {targetText}");
             });
           } else {
             LogError("Target placeholder not detected in the target text argument.");
           }
         } else {
           _ = Services.Framework.RunOnFrameworkThread(delegate {
-            ChatUtils.SendSanitizedChatMessage($"/em {singleText}");
+            ChatUtils.GetInstance().SendSanitizedChatMessage($"/em {singleText}");
           });
         }
       }

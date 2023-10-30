@@ -1,10 +1,8 @@
-﻿using System.Linq;
-
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
+using System.Linq;
 
 using Lumina.Excel.GeneratedSheets;
+
 using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game;
-using Dalamud.Logging;
 
 namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies {
   /// <summary>
@@ -28,17 +26,17 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strateg
     }
 
     internal static uint GetEmoteByName(string name) {
-      if (EmoteCmdComplexPlugin.Instance.GameStateCache is null || EmoteCmdComplexPlugin.Instance.GameStateCache.UnlockedEmotes is null) {
+      if (Services.GameStateCache is null || Services.GameStateCache.UnlockedEmotes is null) {
         return 0;
       }
-      EmoteCmdComplexPlugin.Instance.GameStateCache.Refresh();
-      var emotes = EmoteCmdComplexPlugin.Instance.GameStateCache.UnlockedEmotes.Select(GetExecutableAction).ToList();
+      Services.GameStateCache.Refresh();
+      var emotes = Services.GameStateCache.UnlockedEmotes.Select(GetExecutableAction).ToList();
 
       if (emotes == null || emotes.Count == 0) {
         return 0;
       }
 
-      PluginLog.Information(string.Join(",", emotes));
+      Services.Log.Information(string.Join(",", emotes));
 
       var actionId = emotes.Find(match: e => e.TextCommand is not null && e.TextCommand == $"/{name}");
       return actionId is not null ? actionId.ActionId : 0;

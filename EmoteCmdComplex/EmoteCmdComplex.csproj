@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.0.2.7</Version>
+    <Version>1.0.2.8</Version>
     <Company></Company>
     <Authors>Neko Boi Nick</Authors>
     <Description>
@@ -113,6 +113,7 @@
 
   <ItemGroup>
     <Folder Include="$(ProjectDir)images\" />
+    <None Remove="$(ProjectDir)bin\**" />
     <Content Include="$(SolutionDir)\README.md" CopyToOutputDirectory="Never" />
     <Content Include="$(SolutionDir)\LICENSE" CopyToOutputDirectory="Never" />
     <Content Include="$(SolutionDir)\.gitignore" CopyToOutputDirectory="Never" />

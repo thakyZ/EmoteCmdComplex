@@ -1,7 +1,6 @@
-﻿using System;
+using System;
 
 using Dalamud.Configuration;
-using Dalamud.Plugin;
 
 /// <summary>
 /// Main plugin configuration implementation.
@@ -27,14 +26,13 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base {
     /// </summary>
     /// <param name="pluginInterface">The plugin interface from the main plugin implementation.</param>
     public static Configuration Load() {
-        if (Services.PluginInterface.GetPluginConfig() is Configuration config)
-        {
-            return config;
-        }
-
-        config = new Configuration();
-        config.Save();
+      if (Services.PluginInterface.GetPluginConfig() is Configuration config) {
         return config;
+      }
+
+      config = new Configuration();
+      config.Save();
+      return config;
     }
 
     /// <summary>

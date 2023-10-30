@@ -1,11 +1,7 @@
-﻿using System;
-using System.Numerics;
+using System;
 
-using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
-
-using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base;
 
 using ImGuiNET;
 
@@ -13,8 +9,6 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.UI {
   // It is good to have this be disposable in general, in case you ever need it
   // to do any cleanup
   public class PluginUI : Window, IDisposable {
-    private readonly Configuration configuration;
-
     // this extra boolean exists for ImGui, since you can't ref a property
     private bool visible;
     public bool Visible {
@@ -29,14 +23,13 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.UI {
     }
 
     // passing in the image here just for simplicity
-    public PluginUI() : base($"{EmoteCmdComplexPlugin.PluginName} Settings") {
-      EmoteCmdComplexPlugin.Instance.WindowSystem.AddWindow(this);
-      this.configuration = EmoteCmdComplexPlugin.Instance.Configuration;
+    public PluginUI() : base($"{Plugin.Name} Settings") {
+      Services.WindowSystem.AddWindow(this);
     }
 
     public void Dispose() {
-      EmoteCmdComplexPlugin.Instance.Configuration.Save();
-      EmoteCmdComplexPlugin.Instance.WindowSystem.RemoveWindow(this);
+      Services.Configuration.Save();
+      Services.WindowSystem.RemoveWindow(this);
     }
 
     public override void Draw() {
@@ -44,14 +37,14 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.UI {
         return;
 
       // can't ref a property, so use a local copy
-      var configValue = this.configuration.Debug;
+      var configValue = Services.Configuration.Debug;
       if (ImGui.Checkbox("Debug", ref configValue)) {
-        this.configuration.Debug = configValue;
+        Services.Configuration.Debug = configValue;
         // can save immediately on change, if you don't want to provide a "Save and Close" button
-        this.configuration.Save();
+        Services.Configuration.Save();
       }
       ImGui.Indent();
-      if (EmoteCmdComplexPlugin.Instance.Configuration.Debug) {
+      if (Services.Configuration.Debug) {
         ImGui.TextColored(ImGuiColors.HealerGreen, fmt: "Debug Enabled");
       } else {
         ImGui.TextColored(ImGuiColors.DalamudRed, "Debug Disabled");
@@ -62,7 +55,7 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.UI {
 
     public override void OnClose() {
       settingsVisible = false;
-      EmoteCmdComplexPlugin.Instance.Configuration.Save();
+      Services.Configuration.Save();
     }
   }
 }

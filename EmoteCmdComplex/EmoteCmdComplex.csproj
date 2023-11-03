@@ -101,12 +101,12 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
+  <ItemGroup Condition="'$(Configuration)'=='Release'">
     <Content Include="$(ProjectDir)$(MSBuildProjectName).yaml" CopyToOutputDirectory="Never" />
     <None Remove="$(ProjectDir)$(MSBuildProjectName)2.yaml" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+  <ItemGroup Condition="'$(Configuration)'=='Debug'">
     <None Remove="$(ProjectDir)$(MSBuildProjectName).yaml" />
     <Content Include="$(ProjectDir)$(MSBuildProjectName)2.yaml" CopyToOutputDirectory="Never" />
   </ItemGroup>
@@ -114,20 +114,21 @@
   <ItemGroup>
     <Folder Include="$(ProjectDir)images\" />
     <None Remove="$(ProjectDir)bin\**" />
-    <Content Include="$(SolutionDir)\README.md" CopyToOutputDirectory="Never" />
-    <Content Include="$(SolutionDir)\LICENSE" CopyToOutputDirectory="Never" />
-    <Content Include="$(SolutionDir)\.gitignore" CopyToOutputDirectory="Never" />
-    <EditorConfigFiles Remove="$(SolutionDir)\.editorconfig" />
-    <None Include="$(SolutionDir)\.editorconfig" Link=".editorconfig" />
+    <Compile Remove="$(ProjectDir)bin\**" />
+    <Content Include="$(SolutionDir)README.md" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir)LICENSE" CopyToOutputDirectory="Never" />
+    <Content Include="$(SolutionDir).gitignore" CopyToOutputDirectory="Never" />
+    <EditorConfigFiles Remove="$(SolutionDir).editorconfig" />
+    <None Include="$(SolutionDir).editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
   <Target Name="CleanOutDir" AfterTargets="Build">
     <ItemGroup>
-      <DeleteAssemblies Include="$(TargetDir)*.pdb" />
-      <DeleteAssemblies Include="$(TargetDir)$(AssemblyName).deps.json" />
+      <DeleteAssemblies Condition="Exists('$(TargetDir)$(AssemblyName).deps.json')" Include="$(TargetDir)$(AssemblyName).deps.json" />
     </ItemGroup>
-    <Message Text="Deleting @(DeleteAssemblies)" Importance="high" />
+    <Message Text="Deleting @(DeleteAssemblies)" Importance="High" />
     <Delete Files="@(DeleteAssemblies)" />
-    <RemoveDir Directories="$(TargetDir)\ref\" />
+    <Message Condition="Exists('$(TargetDir)ref\')" Text="Deleting '$(TargetDir)ref\'" Importance="High" />
+    <RemoveDir Condition="Exists('$(TargetDir)ref\')" Directories="$(TargetDir)\ref\" />
   </Target>
 </Project>

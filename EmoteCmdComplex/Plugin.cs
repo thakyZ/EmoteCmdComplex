@@ -9,6 +9,8 @@ using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.ActionExecutor.Strategies;
 using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game;
 
+// cSpell:ignoreRegExp /(?<=\/)xlem/
+
 /// <summary>
 /// Main plugin implementation.
 /// </summary>
@@ -30,7 +32,7 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
     /// The constructor for the plugin.
     /// </summary>
     /// <param name="pluginInterface">Dalamud Plugin Interface.</param>
-    public Plugin(DalamudPluginInterface pluginInterface) {
+    public Plugin(IDalamudPluginInterface pluginInterface) {
       pluginInterface.Create<Services>();
       Services.Init(this);
       Services.Commands.AddHandler(CommandName, new CommandInfo(OnCommand) {
@@ -38,7 +40,7 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
       });
       unsafe {
         // Passes to _targetSystem in another partial class that needs to be unsafe: EmoteCmdComplex.EmoteHandler.cs
-        _targetSystem = (TargetSystem*)Services.Targets.Address;
+        _targetSystem = TargetSystem.Instance();
       }
 
       // Add the Plugin interface when built on debug system.
@@ -70,8 +72,8 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
       // Borrowed from https://stackoverflow.com/questions/14655023/split-a-string-that-has-white-spaces-unless-they-are-enclosed-within-quotes
       var resultArgs = args.Split('"')
         .Select((element, index) => index % 2 == 0 // If even index
-                ? element.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) // Split the item
-                : new string[] { element }) // Keep the entire item
+                ? element.Split(' ', StringSplitOptions.RemoveEmptyEntries) // Split the item
+                : [ element ]) // Keep the entire item
         .SelectMany(element => element).ToList();
 
       // If the result arguments are not surrounded in quotes or there were way too many arguments passed.

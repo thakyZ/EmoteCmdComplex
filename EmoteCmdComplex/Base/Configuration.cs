@@ -24,7 +24,6 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Base {
     /// <summary>
     /// Initializes the configuration.
     /// </summary>
-    /// <param name="pluginInterface">The plugin interface from the main plugin implementation.</param>
     public static Configuration Load() {
       if (Services.PluginInterface.GetPluginConfig() is Configuration config) {
         return config;

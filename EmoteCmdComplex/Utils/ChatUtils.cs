@@ -10,6 +10,8 @@ using FFXIVClientStructs.FFXIV.Client.System.String;
 
 using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Game.Structs;
 
+// cSpell:word ascclemens
+
 namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Utils {
   /// <summary>
   /// Chat utilities to send sanitized chat messages to FFXIV.
@@ -30,7 +32,7 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Utils {
     }
 
     private ChatUtils() {
-      Services.GameInteropProvider.InitializeFromAttributes(this);
+      Services.InteropProvider.InitializeFromAttributes(this);
     }
 
     [Signature(Signatures.SanitizeChatString, Fallibility = Fallibility.Fallible)]
@@ -69,13 +71,13 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.Utils {
       var payloadMem = Marshal.AllocHGlobal(400);
       Marshal.StructureToPtr(new ChatPayload(messageBytes), payloadMem, false);
 
-      this._processChatBoxEntry((nint)Framework.Instance()->GetUiModule(), payloadMem, nint.Zero, 0);
+      this._processChatBoxEntry((nint)Framework.Instance()->GetUIModule(), payloadMem, nint.Zero, 0);
 
       Marshal.FreeHGlobal(payloadMem);
     }
 
     public void SendSanitizedChatMessage(string text, bool commandOnly = true) {
-      if (commandOnly && !text.StartsWith("/")) {
+      if (commandOnly && !text.StartsWith('/')) {
         throw new ArgumentException($"The specified message \"{text}\" does not start with a slash while in command-only mode.");
       }
 

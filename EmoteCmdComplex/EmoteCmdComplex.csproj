@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
+	<Import Project="Dalamud.Plugin.Bootstrap.targets"/>
+
   <PropertyGroup>
     <Version>1.0.2.8</Version>
     <Company></Company>
@@ -15,6 +17,7 @@
 
   <PropertyGroup>
     <AssemblyTitle>$(Title)</AssemblyTitle>
+    <AssemblyName>$(MSBuildProjectName)</AssemblyName>
     <Product>$(Title)</Product>
     <PluginVersion>$(Version)</PluginVersion>
     <FileVersion>$(Version)</FileVersion>
@@ -22,7 +25,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Platforms>x64</Platforms>
     <Configurations>Release;Debug</Configurations>
     <Nullable>Enable</Nullable>
@@ -34,14 +37,14 @@
     <RestorePackagesWithLockFile>True</RestorePackagesWithLockFile>
     <CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
     <AppendTargetFrameworkToOutputPath>False</AppendTargetFrameworkToOutputPath>
-    <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.$(Title.Replace(" ", "").Replace("Command", "Cmd"))</RootNamespace>
+    <RootNamespace>NekoBoiNick.FFXIV.DalamudPlugin.$(MSBuildProjectName)</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <AssemblyName>$(MSBuildProjectName)</AssemblyName>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>PdbOnly</DebugType>
     <Optimize>True</Optimize>
-    <OutputPath>$(ProjectDir)bin\Release\</OutputPath>
+    <OutputPath>$(ProjectDir)bin\$(Configuration)\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>Prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -49,6 +52,8 @@
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <AssemblyName>$(MSBuildProjectName)2</AssemblyName>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
     <OutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</OutputPath>
     <BaseOutputPath>$(DalamudDevPlugins)\$(MSBuildProjectName)\</BaseOutputPath>
@@ -57,51 +62,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
 
-  <PropertyGroup>
-    <DalamudLibPath>$(AppData)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(IsCI)' == 'true'">
-    <Dalamud>$(HOME)/dalamud</Dalamud>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="DalamudPackager" Version="2.1.12" />
-    <Reference Include="Dalamud">
-      <HintPath>$(DalamudLibPath)\Dalamud.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="FFXIVClientStructs">
-      <HintPath>$(DalamudLibPath)\FFXIVClientStructs.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="ImGui.NET">
-      <HintPath>$(DalamudLibPath)\ImGui.NET.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="ImGuiScene">
-      <HintPath>$(DalamudLibPath)\ImGuiScene.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Lumina">
-      <HintPath>$(DalamudLibPath)\Lumina.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Lumina.Excel">
-      <HintPath>$(DalamudLibPath)\Lumina.Excel.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <Reference Include="FFXIVClientStructs">
-      <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)'=='Release'">
+  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
     <Content Include="$(ProjectDir)$(MSBuildProjectName).yaml" CopyToOutputDirectory="Never" />
     <None Remove="$(ProjectDir)$(MSBuildProjectName)2.yaml" />
   </ItemGroup>
@@ -112,9 +73,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="$(ProjectDir)images\" />
-    <None Remove="$(ProjectDir)bin\**" />
     <Compile Remove="$(ProjectDir)bin\**" />
+    <None Remove="$(ProjectDir)bin\**" />
+    <Folder Include="$(ProjectDir)images\" />
+    <None Include="$(SolutionDir).github\workflows\build.yml" Link="build.yml" />
     <Content Include="$(SolutionDir)README.md" CopyToOutputDirectory="Never" />
     <Content Include="$(SolutionDir)LICENSE" CopyToOutputDirectory="Never" />
     <Content Include="$(SolutionDir).gitignore" CopyToOutputDirectory="Never" />
@@ -124,11 +86,21 @@
 
   <Target Name="CleanOutDir" AfterTargets="Build">
     <ItemGroup>
-      <DeleteAssemblies Condition="Exists('$(TargetDir)$(AssemblyName).deps.json')" Include="$(TargetDir)$(AssemblyName).deps.json" />
+      <DeleteAssemblies Include="$(TargetDir)$(AssemblyName).deps.json" />
     </ItemGroup>
     <Message Text="Deleting @(DeleteAssemblies)" Importance="High" />
     <Delete Files="@(DeleteAssemblies)" />
-    <Message Condition="Exists('$(TargetDir)ref\')" Text="Deleting '$(TargetDir)ref\'" Importance="High" />
-    <RemoveDir Condition="Exists('$(TargetDir)ref\')" Directories="$(TargetDir)\ref\" />
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="CleanOutDir" Condition=" '$(Configuration)' == 'Debug' ">
+    <ItemGroup>
+      <InputAssemblies Include="$(TargetPath)" />
+      <InputAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetPath)" />
+    </ItemGroup>
+    <!--<Exec Command="$(PkgILRepack)tools\ILRepack.exe /union /lib:$(DalamudLibPath) /out:$(TargetDir)$(TargetFileName) @(InputAssemblies, ' ')" />-->
+    <ItemGroup>
+      <CleanAssemblies Include="$(TargetDir)*.dll" Exclude="$(TargetDir)$(TargetFileName)" />
+    </ItemGroup>
+    <!--<Delete Files="@(CleanAssemblies)" />-->
   </Target>
 </Project>

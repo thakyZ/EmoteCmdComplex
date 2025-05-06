@@ -15,91 +15,103 @@ using NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex.UI;
 namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
   public class Services : IDisposable {
     [NotNull, AllowNull]
-    /// <summary>
-    /// Plugin UI Manager
-    /// </summary>
-    internal static PluginUI PluginUI { get; private set; }
+    private static readonly Services _instance;
 
     /// <summary>
     /// Plugin UI Manager
     /// </summary>
     [NotNull, AllowNull]
-    internal static Plugin Instance { get; private set; }
+    public  PluginUI _PluginUI { get; set; }
+    public static PluginUI PluginUI  => _instance._PluginUI;
+
+    /// <summary>
+    /// Plugin UI Manager
+    /// </summary>
+    [NotNull, AllowNull]
+    public Plugin _Instance { get; set; }
+    public static Plugin Instance  => _instance._Instance;
 
     /// <summary>
     /// The game's state cache.
     /// </summary>
     [NotNull, AllowNull]
-    internal static GameStateCache GameStateCache { get; private set; }
+    public GameStateCache _GameStateCache { get; set; }
+    public static GameStateCache GameStateCache => _instance._GameStateCache;
 
     /// <summary>
     /// The configuration of the plugin.
     /// </summary>
     [NotNull, AllowNull]
-    internal static Configuration Configuration { get; private set; }
+    public Configuration _Configuration { get; set; }
+    public static Configuration Configuration => _instance._Configuration;
 
     /// <summary>
     /// The window system.
     /// </summary>
     [NotNull, AllowNull]
-    internal static WindowSystem WindowSystem { get; } = new WindowSystem(Plugin.Name);
+    public WindowSystem _WindowSystem { get; } = new WindowSystem(Plugin.Name);
+    public static WindowSystem WindowSystem => _instance._WindowSystem;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static DalamudPluginInterface PluginInterface { get; private set; }
+    public IDalamudPluginInterface _PluginInterface { get; init; }
+    public static IDalamudPluginInterface PluginInterface => _instance._PluginInterface;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static IChatGui Chat { get; private set; }
+    public IChatGui _Chat { get; init; }
+    public static IChatGui Chat => _instance._Chat;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static ICommandManager Commands { get; private set; }
+    public ICommandManager _Commands { get; init; }
+    public static ICommandManager Commands => _instance._Commands;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static ITargetManager Targets { get; private set; }
+    public ITargetManager _Targets { get; init; }
+    public static ITargetManager Targets => _instance._Targets;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static IClientState ClientState { get; private set; }
+    public IClientState _ClientState { get; init; }
+    public static IClientState ClientState => _instance._ClientState;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static ISigScanner SigScanner { get; private set; }
+    public ISigScanner _SigScanner { get; init; }
+    public static ISigScanner SigScanner => _instance._SigScanner;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static IDataManager DataManager { get; private set; }
+    public IDataManager _DataManager { get; init; }
+    public static IDataManager DataManager => _instance._DataManager;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static IFramework Framework { get; private set; }
+    public IFramework _Framework { get; init; }
+    public static IFramework Framework => _instance._Framework;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static IPluginLog Log { get; private set; }
+    public IPluginLog _Log { get; init; }
+    public static IPluginLog Log => _instance._Log;
 
     [PluginService]
-    [RequiredVersion("1.0")]
     [AllowNull, NotNull]
-    public static IGameInteropProvider GameInteropProvider { get; private set; }
+    public IGameInteropProvider _InteropProvider { get; init; }
+    public static IGameInteropProvider InteropProvider => _instance._InteropProvider;
+
+    static Services() {
+      _instance = new();
+    }
 
     public static void Init(Plugin instance) {
-      Instance = instance;
-      Configuration = Configuration.Load();
-      GameStateCache = new GameStateCache();
+      _instance._Instance = instance;
+      _instance._Configuration = Configuration.Load();
+      _instance._GameStateCache = new GameStateCache();
 #if DEBUG
-      PluginUI = new PluginUI();
+      _instance._PluginUI = new PluginUI();
       PluginInterface.UiBuilder.Draw += WindowSystem.Draw;
 #endif
     }

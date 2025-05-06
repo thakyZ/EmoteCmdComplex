@@ -21,7 +21,7 @@ namespace NekoBoiNick.FFXIV.DalamudPlugin.EmoteCmdComplex {
       return false;
     }
     private void RunCustomEmote(string singleText, string targetText, uint emoteId = 0) {
-      var isTargeting = _targetSystem->GetCurrentTarget() is not null;
+      var isTargeting = _targetSystem->GetTargetObject() is not null;
 
       if (emoteId != 0) {
         var emote = EmoteStrategy.GetEmoteById(emoteId) ?? throw new ArgumentNullException($"Emote not found... ID: [{emoteId}]");
